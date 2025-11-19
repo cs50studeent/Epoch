@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Past Timer + Countdown</title>
+<style>
+  body {
+    background: black;
+    color: white;
+    font-family: sans-serif;
+    text-align: center;
+    margin-top: 40px;
+  }
+
+  section {
+    border: 1px solid #666;
+    padding: 20px;
+    width: 330px;
+    margin: 20px auto;
+    border-radius: 8px;
+    background: #111;
+  }
+
+  input, button {
+    padding: 10px;
+    font-size: 1.1em;
+    margin-top: 10px;
+  }
+
+  .result {
+    font-size: 1.4em;
+    margin-top: 15px;
+  }
+</style>
+</head>
+<body>
+
+<section>
+  <h2>January 4, 2003 @ 00:00</h2>
+  <div id="pastResult" class="result"></div>
+</section>
+
+<section>
+  <h2>⏳ Countdown</h2>
+
+  <!-- Calendar + Time Input -->
+  <input type="datetime-local" id="futureInput">
+
+  <br>
+  <button onclick="startCountdown()">Start Countdown</button>
+
+  <div id="futureResult" class="result"></div>
+</section>
+
+<script>
+let intervalPast, intervalFuture;
+
+// ----------------------
+// PAST TIMER (hard-coded)
+// ----------------------
+const pastDate = new Date("2003-01-04T00:00:00");
+
+function startPastTimer() {
+  updatePastTimer();
+  intervalPast = setInterval(updatePastTimer, 1000);
+}
+
+function updatePastTimer() {
+  const now = new Date();
+  const diff = now - pastDate;
+
+  const sec = Math.floor(diff / 1000) % 60;
+  const min = Math.floor(diff / (1000 * 60)) % 60;
+  const hr = Math.floor(diff / (1000 * 60 * 60)) % 24;
+  const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+
+  document.getElementById("pastResult").textContent =
+    `${days}d ${hr}h ${min}m ${sec}s`;
+}
+
+// ----------------------
+// COUNTDOWN TO CALENDAR DATE
+// ----------------------
+let targetDate = null;
+
+function startCountdown() {
+  const input = document.getElementById("futureInput").value;
+
+  if (!input) {
+    alert("Please choose a date and time.");
+    return;
+  }
+
+  targetDate = new Date(input);
+
+  if (targetDate <= new Date()) {
+    alert("Please select a future date and time.");
+    return;
+  }
+
+  clearInterval(intervalFuture);
+  updateFutureTimer();
+  intervalFuture = setInterval(updateFutureTimer, 1000);
+}
+
+function updateFutureTimer() {
+  const now = new Date();
+  const diff = targetDate - now;
+
+  if (diff <= 0) {
+    document.getElementById("futureResult").textContent = "⏰ Time's up!";
+    clearInterval(intervalFuture);
+    return;
+  }
+
+  const sec = Math.floor(diff / 1000) % 60;
+  const min = Math.floor(diff / (1000 * 60)) % 60;
+  const hr = Math.floor(diff / (1000 * 60 * 60)) % 24;
+  const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+
+  document.getElementById("futureResult").textContent =
+    `${days}d ${hr}h ${min}m ${sec}s`;
+}
+
+// Start the past timer immediately
+startPastTimer();
+</script>
+
+</body>
+</html>
