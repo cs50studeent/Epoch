@@ -3,33 +3,55 @@
 <head>
 <meta charset="UTF-8">
 <title>Past Timer + Countdown</title>
+<meta name="viewport" content="width=device-width, initial-scale=1"> <!-- Add viewport for mobile -->
 <style>
   body {
     background: black;
     color: white;
     font-family: sans-serif;
     text-align: center;
-    margin-top: 40px;
+    margin: 0;            /* Remove top margin for mobile friendliness */
+    padding: 0;
+    min-height: 100vh;
+    box-sizing: border-box;
   }
 
   section {
     border: 1px solid #666;
-    padding: 20px;
-    width: 330px;
-    margin: 20px auto;
+    padding: 5vw 5vw 6vw 5vw; /* Responsive padding */
+    width: 90vw;
+    max-width: 400px;     /* Limit width on big screens */
+    margin: 24px auto;
     border-radius: 8px;
     background: #111;
+    box-sizing: border-box;
   }
 
   input, button {
-    padding: 10px;
+    padding: 12px 10px;
     font-size: 1.1em;
     margin-top: 10px;
+    border-radius: 5px;
+    border: none;
+    width: 100%;         /* Make input/button fill container on mobile */
+    max-width: 340px;    /* Limit width on big screens */
+    box-sizing: border-box;
   }
 
   .result {
     font-size: 1.4em;
-    margin-top: 15px;
+    margin-top: 18px;
+    word-break: break-all;
+  }
+
+  @media (min-width: 600px) {
+    section {
+      width: 330px;
+      padding: 20px;
+    }
+    input, button {
+      width: 320px;
+    }
   }
 </style>
 </head>
@@ -42,22 +64,14 @@
 
 <section>
   <h2>⏳ Countdown</h2>
-
-  <!-- Calendar + Time Input -->
   <input type="datetime-local" id="futureInput">
-
   <br>
   <button onclick="startCountdown()">Start Countdown</button>
-
   <div id="futureResult" class="result"></div>
 </section>
 
 <script>
 let intervalPast, intervalFuture;
-
-// ----------------------
-// PAST TIMER (hard-coded)
-// ----------------------
 const pastDate = new Date("2003-01-04T00:00:00");
 
 function startPastTimer() {
@@ -68,7 +82,6 @@ function startPastTimer() {
 function updatePastTimer() {
   const now = new Date();
   const diff = now - pastDate;
-
   const sec = Math.floor(diff / 1000) % 60;
   const min = Math.floor(diff / (1000 * 60)) % 60;
   const hr = Math.floor(diff / (1000 * 60 * 60)) % 24;
@@ -78,9 +91,6 @@ function updatePastTimer() {
     `${days}d ${hr}h ${min}m ${sec}s`;
 }
 
-// ----------------------
-// COUNTDOWN TO CALENDAR DATE
-// ----------------------
 let targetDate = null;
 
 function startCountdown() {
@@ -122,7 +132,6 @@ function updateFutureTimer() {
     `${days}d ${hr}h ${min}m ${sec}s`;
 }
 
-// Start the past timer immediately
 startPastTimer();
 </script>
 
